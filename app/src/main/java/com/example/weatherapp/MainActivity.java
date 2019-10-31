@@ -3,16 +3,19 @@ package com.example.weatherapp;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.weatherapp.Adapter.ViewPagerAdapter;
 import com.example.weatherapp.Common.Common;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -61,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
                         {
                             buildLocationRequest();
                             buildLocationCallBack();
-
+                            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+                                return;
+                            }
 
 
                             fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback,Looper.myLooper()); 
@@ -75,12 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }).check();
-
-
-
-
-
-
 
 
     }
@@ -106,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(TodayWeatherFragment.getInstance(),"Today");
+        viewPager.setAdapter(adapter);
 
     }
 
