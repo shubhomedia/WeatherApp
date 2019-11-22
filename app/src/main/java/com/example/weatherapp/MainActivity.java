@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).check();
 
-
     }
 
     private void buildLocationCallBack() {
